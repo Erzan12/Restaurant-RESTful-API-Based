@@ -5,17 +5,28 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
-use CodeIgniter\Model\UserModel;
+use App\Models\UserModel;
 
 class UserController extends ResourceController
 {
-    public function show($id = null)
+    public function getAllUsers()
     {
-        $user = [
-            'id' => $id,
-            'name' => 'Earl Grey',
-            'email' => 'earlgrey@gmail.com',
-        ];
+        $userModel = new UserModel();
+        $user = $userModel->findAll();
+        if (!empty($user)) {
+            return $this->respond($user);
+        }else{
+            return $this->respond([
+                'message' => 'No users found',
+                'errors' => '204 (No Content)'
+            ]);
+        }
+    }
+
+    public function getUser()
+    {
+        $userModel = new UserModel();
+        $user = $userModel->find($uId);
 
         return $this->respond($user);
     }
@@ -23,22 +34,45 @@ class UserController extends ResourceController
     public function create()
     {
         $userModel = new UserModel();   //load the user model
+        $data = $this->request->getJSON(true);
 
-        $validation = \Config\Services::validation();
+        // Model Based Validation
+        if ($userModel->save($data)) {
+            $userId = $userModel->getInsertID();
+            $user = $userModel->find($userId);
+            return $this->respondCreated([
+                'message' => 'User created successfully',
+                'save_user' => $user
+            ]);
+            }else{
+                return $this->respond([
+                    'errors' => $userModel->errors(),
+                ], 400);
+            }
 
-        if ($userModel === null) 
-            $this->
-        {
-            throw $this->respond("message:", "user not found")
-        }
+                    // controller based validation
+        // $rules = [
+        //             'name'     => 'required|is_unique[users.name]',
+        //             'email'    => 'required|valid_email|is_unique[users.email]',
+        //             'password' => 'required|min_length[6]',
+        //         ];
 
-        return $this->responapi-testingdCreated([
-            'message' => 'User created successfully',
-            'user' => $data
-        ]);
+
+        // if ($this->validateData($data, $rules)) {
+        //     $userModel->save($data);
+        //     return $this->respondCreated([
+        //         'message' => 'User created successfully',
+        //         'user' => $data
+        //     ]);
+        // }else{
+        //     return $this->respond([
+        //         'errors' => $userModel->getErrors(),
+        //     ], 400);
+        // }
+
     }
 
-    public function edit()
+    public function put()
     {
         $data = [
             'name' => $name,
