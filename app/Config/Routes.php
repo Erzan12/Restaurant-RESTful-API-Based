@@ -24,4 +24,9 @@ $routes->group('api', ['filter' => 'auth'], function ($routes) {
     $routes->resource('users', ['controller' => 'UserController']);
 });
 
+// API route for Menu with auth 
+$routes->group('api', ['filter' => 'auth'], function($routes) {
+    $routes->get('menu', 'MenuController::index');
+    $routes->post('menu', 'MenuController::create'); // Admin only
+});
 
