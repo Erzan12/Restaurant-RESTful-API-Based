@@ -9,7 +9,7 @@ use App\Models\UserModel;
 
 class UserController extends ResourceController
 {
-    public function getAllUsers()
+    public function index()
     {
         $userModel = new UserModel();
         $user = $userModel->findAll();
@@ -23,63 +23,77 @@ class UserController extends ResourceController
         }
     }
 
-    public function getUser()
+    public function getUser($id)
     {
         $userModel = new UserModel();
-        $user = $userModel->find($uId);
+        $user = $userModel->find($id);
+
+        if(!$user) {
+            return $this->failNotFound('User not found');
+        }
 
         return $this->respond($user);
     }
 
-    public function create()
+    public function update($id = null)
     {
-        $userModel = new UserModel();   //load the user model
-        $data = $this->request->getJSON(true);
+        // get user from the usermodel
+        $userModel = new UserModel();
+        // get data from the request (assuming JSON body)
+        $data = $this->request->getJSON();
 
-        // Model Based Validation
-        if ($userModel->save($data)) {
-            $userId = $userModel->getInsertID();
-            $user = $userModel->find($userId);
-            return $this->respondCreated([
-                'message' => 'User created successfully',
-                'save_user' => $user
-            ]);
-            }else{
-                return $this->respond([
-                    'errors' => $userModel->errors(),
-                ], 400);
-            }
+        if (!$data) {
+            return $this->failValidationError('Invalid data provided');
+        }
 
-                    // controller based validation
-        // $rules = [
-        //             'name'     => 'required|is_unique[users.name]',
-        //             'email'    => 'required|valid_email|is_unique[users.email]',
-        //             'password' => 'required|min_length[6]',
-        //         ];
+        //check if the user exists
+        $user = $userModel->find($id);
+        if (!$user) {
+            return $this->failNotfound('User not found');
+        }
 
 
-        // if ($this->validateData($data, $rules)) {
-        //     $userModel->save($data);
-        //     return $this->respondCreated([
-        //         'message' => 'User created successfully',
-        //         'user' => $data
-        //     ]);
-        // }else{
+        // if ($userModel->update($id, [
+        //     'name' => $data->name ?? $user['name'],
+        //     'email' => $data->email ?? $user['email'],
+        // ])) {
+        //     $updatedUser = $userModel->find($id);
         //     return $this->respond([
-        //         'errors' => $userModel->getErrors(),
-        //     ], 400);
-        // }
-
-    }
-
-    public function put()
-    {
+        //         'message' => 'User updated successfully',
+        //         'update_user' => $data,
+        //         'modified_at' => $updatedUser['modified_at'] ?? null,
+        //     ], 200);
+        // } 
         $data = [
-            'name' => $name,
-            'email' => $email,
+            'name'      => $data->name,
+            'email'     => $data->email,
+            'modified_at' => date('Y-m-d H:i:s'),
         ];
-        $builder->where('id', $id);
-        $builder->update($data);
+        if ($userModel->update($id, $data)) {
+            return $this->respond([
+                'message'   => 'User updated successfully',
+                'update_user' => $data
+            ], 200);
+        } else{
+            return $this->fail('Update failed');
+        }
+    }
+    public function delete($id = null)
+    {
+        $userModel = new UserModel();
+        $user = $userModel->find($id);
+
+        if (!$user) {
+            return $this->failNotFound('User not found');
+        }
+        if ($userModel->delete($id)){
+            return $this->respond([
+                'message' => "User '{$user['name']}' has been deleted.",
+                'user' => $user
+            ]);
+        } else {
+            return $this->failServerError('Failed to delete user');
+        }
     }
 
 }
