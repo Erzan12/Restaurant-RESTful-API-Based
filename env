@@ -38,6 +38,8 @@
 # database.default.DBPrefix =
 # database.default.port = 3306
 
+# JWT_SECRET_KEY = aec91ebb44d6bd2e95c43041de691ee5bfdf2c50df798270d64627c438482008
+
 # If you use MySQLi as tests, first update the values of Config\Database::$tests.
 # database.tests.hostname = localhost
 # database.tests.database = ci4_test

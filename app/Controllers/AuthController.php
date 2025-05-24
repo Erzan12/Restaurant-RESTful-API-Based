@@ -13,7 +13,7 @@ class AuthController extends ResourceController
 {
     public function userLogin()
     {
-        $data = (array) $this->request->getJSON();
+        $data = (array) $this->request->getJSON(true);
         $userModel = new UserModel();
         $user = $userModel->where('email', $data['email'])->first();
 
@@ -46,13 +46,13 @@ class AuthController extends ResourceController
     public function registerUser()
     {
         $userModel = new UserModel();   
-        $data = (array) $this->request->getJSON();
+        $data = (array) $this->request->getJSON(true);
 
         if (!$userModel->insert($data)) {
             return $this->respond([
                 'errors' => $userModel->errors()
             ], 400);
-        }
+        };
 
         $user = $userModel->where('email', $data['email'])->first();
         unset($user['password']);

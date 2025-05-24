@@ -18,15 +18,16 @@ $routes->get('/', 'Home::index');
 $routes->post('login', 'AuthController::userLogin');
 $routes->post('register', 'AuthController::registerUser');
 
-// API route with JWT auth
+// API route for Users with JWT auth
 $routes->group('api', ['filter' => 'auth'], function ($routes) {
     $routes->get('users/(:num)', 'UserController::getUser/$1');
+    $routes->post('users/(:num)', 'UserController::update/$1');
     $routes->resource('users', ['controller' => 'UserController']);
 });
 
 // API route for Menu with auth 
 $routes->group('api', ['filter' => 'auth'], function($routes) {
     $routes->get('menu', 'MenuController::index');
-    $routes->post('menu', 'MenuController::create'); // Admin only
+    $routes->post('menu/addmenu', 'MenuController::create'); // Admin only
 });
 
