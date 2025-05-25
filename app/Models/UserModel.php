@@ -26,8 +26,8 @@ class UserModel extends Model
     // Model Based Validation
     protected $validationRules      = [
         'id'                =>  'max_length[15]',
-        'name'              =>  'required|is_unique[users.name,id,{$id}]', // validationrules not really required to be here in usermodel unless it needs to be validate everytime if its static like password
-        'email'             =>  'required|valid_email|is_unique[users.email,id,{$id}]', // validationrules not really required to be here in usermodel unless it needs to be validate everytime if its static like password
+        // 'name'              =>  'required|is_unique[users.name,id,{$id}]', // validationrules not really required to be here in usermodel unless it needs to be validate everytime if its static like password
+        // 'email'             =>  'required|valid_email|is_unique[users.email,id,{$id}]', // validationrules not really required to be here in usermodel unless it needs to be validate everytime if its static like password
         'password'          =>  'required|min_length[6]',
         'password_confirm'  =>  'required|matches[password]'
     ];

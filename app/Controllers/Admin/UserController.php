@@ -48,26 +48,28 @@ class UserController extends ResourceController
 
         $data = $this->request->getJSON(true);
 
-        // to be fix error in validation | BUGGY code
-        $rules = [
-            'name' => 'required|min_length[3]',
-            'email' => 'required|valid_email',
-        ];
+        // // to be fix error in validation | BUGGY code
+        // $rules = [
+        //     'name' => 'required|min_length[3]',
+        //     'email' => 'required|valid_email',
+        // ];
 
-        // Check if name has changed → apply `is_unique` rule
-        if ($this->request->getPost('name') !== $user['name']) {
-            $rules['name'] .= "|is_unique[users.name,id,{$id}]";
-        }
+        // // Check if name has changed → apply `is_unique` rule
+        // if ($this->request->getPost('name') !== $user['name']) {
+        //     $rules['name'] .= "|is_unique[users.name,id,{$id}]";
+        // }
 
-        // Check if email has changed → apply `is_unique` rule
-        if ($this->request->getPost('email') !== $user['email']) {
-            $rules['email'] .= "|is_unique[users.email,id,{$id}]";
-        }
+        // // Check if email has changed → apply `is_unique` rule
+        // if ($this->request->getPost('email') !== $user['email']) {
+        //     $rules['email'] .= "|is_unique[users.email,id,{$id}]";
+        // }
 
-        // Validate
-        if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
+        // // Validate
+        // if (!$this->validate($rules)) {
+        //     return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        // }
+
+        // 
 
         $data['modified_at'] = date('Y-m-d H:i:s');
 
