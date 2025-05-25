@@ -13,25 +13,9 @@ class MenuController extends ResourceController
     {
         $menuModel = new MenuModel();
         return $this->respond([
-            'status' => 200,
-            'data' => $menuModel->findAll()
-        ]);
-    }
-
-    public function create()
-    {
-        $menuModel = new MenuModel();
-        $data = $this->request->getJSON();
-
-        if(!$menuModel->insert($data)) {
-            return $this->respond([
-                'errors' => $userModel->errors()
-            ], 400);
-        };
-
-        return $this->respondCreated([
-            'message' => 'Menu item created successfully',
-            'item' => $data
+            'status'    => 200,
+            'message'   => 'Here is the Menu for Today!',
+            'data'      => $menuModel->findAll()
         ]);
     }
 

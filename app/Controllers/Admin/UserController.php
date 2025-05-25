@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -9,6 +9,8 @@ use App\Models\UserModel;
 
 class UserController extends ResourceController
 {
+    
+
     public function index()
     {
         $userModel = new UserModel();
@@ -23,7 +25,7 @@ class UserController extends ResourceController
         }
     }
 
-    public function getUser($id)
+    public function getUser($id = null)
     {
         $userModel = new UserModel();
         $user = $userModel->find($id);
@@ -37,33 +39,6 @@ class UserController extends ResourceController
 
     public function update($id = null)
     {
-        // // get user from the usermodel
-        // $userModel = new UserModel();
-        // // get data from the request (assuming JSON body)
-        // $data = $this->request->getJSON();
-
-        // if (!$data) {
-        //     return $this->failValidationError('Invalid data provided');
-        // }
-
-        // //check if the user exists
-        // $user = $userModel->find($id);
-        // if (!$user) {
-        //     return $this->failNotfound('User not found');
-        // }
-
-
-        // // if ($userModel->update($id, [
-        // //     'name' => $data->name ?? $user['name'],
-        // //     'email' => $data->email ?? $user['email'],
-        // // ])) {
-        // //     $updatedUser = $userModel->find($id);
-        // //     return $this->respond([
-        // //         'message' => 'User updated successfully',
-        // //         'update_user' => $data,
-        // //         'modified_at' => $updatedUser['modified_at'] ?? null,
-        // //     ], 200);
-        // // } 
         $userModel = new UserModel();
         $user = $userModel->find($id);
 
@@ -72,6 +47,27 @@ class UserController extends ResourceController
         }
 
         $data = $this->request->getJSON(true);
+
+        // to be fix error in validation | BUGGY code
+        $rules = [
+            'name' => 'required|min_length[3]',
+            'email' => 'required|valid_email',
+        ];
+
+        // Check if name has changed → apply `is_unique` rule
+        if ($this->request->getPost('name') !== $user['name']) {
+            $rules['name'] .= "|is_unique[users.name,id,{$id}]";
+        }
+
+        // Check if email has changed → apply `is_unique` rule
+        if ($this->request->getPost('email') !== $user['email']) {
+            $rules['email'] .= "|is_unique[users.email,id,{$id}]";
+        }
+
+        // Validate
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
 
         $data['modified_at'] = date('Y-m-d H:i:s');
 

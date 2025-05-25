@@ -1,47 +1,47 @@
-<?php
+<!-- 
+    // public function update($id = null)
+    // {
 
-namespace App\Database\Migrations;
+    //     $userModel = new UserModel();
+    //     $user = $userModel->find($id);
 
-use CodeIgniter\Database\Migration;
+    //     if(!$user) {
+    //         return $this->failNotFound('User not found');
+    //     }
 
-class UsersTable extends Migration
-{
-    public function up()
-    {
-        $this->forge->addField([
-            'id' => [
-                'type' => 'INT',
-                'constraint' => '11',
-                'unsigned' => true,
-                'auto_increment' => true,
-            ],
-            'name' => [
-                'type' => 'VARCHAR',
-                'constraint' => '100',
-            ],
-            'email' => [
-                'type' => 'VARCHAR',
-                'constraint' => '100',
-            ],
-            'password' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-            ],
-            'created_at' => [
-                'type' => 'DATETIME',
-                'null' => true,
-            ],
-            'updated_at' => [
-                'type' => 'DATETIME',
-                'null' => true,
-            ],
-        ]);
-        $this->forge->addPrimaryKey('id');
-        $this->forge->createTable('users');
-    }
+    //     $data = $this->request->getJSON(true);
 
-    public function down()
-    {
-        $this->forge->dropTable('users');
-    }
-}
+    //     //working validation but only email is_unique i want to make it both name and email
+    //     $rules = [
+    //         'name'  => 'required|min_length[3]',
+    //     ];
+
+    //     if ($this->request->getPost('email') !== $user['email']) {
+    //         $rules['email'] = "required|valid_email|is_unique[users.email,id,{$id}]";
+    //     } else {
+    //         $rules['email'] = 'required|valid_email';
+    //     }
+
+    //     if (!$this->validate($rules)) {
+    //     return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+    //     }
+
+    //     $data['modified_at'] = date('Y-m-d H:i:s');
+
+    //     if ($userModel->update($id, $data)) {
+    //         $updatedUser = $userModel->find($id);
+    //         return $this->respond([
+    //             'message'   => 'User updated successfully',
+    //             'update_user' => [
+    //                 'name'          => $updatedUser['name'],
+    //                 'email'         => $updatedUser['email'],
+    //                 'modified_at'   => $updatedUser['modified_at'],
+    //             ]
+    //         ], 200);
+    //     } else{
+    //         return $this->fail([
+    //             'error' => 'Update failed',
+    //             'details' => $userModel->errors()
+    //         ]);
+    //     }
+    // } -->

@@ -37,9 +37,15 @@ class AuthController extends ResourceController
         unset($user['created_at'], $user['updated_at'], $user['modified_at']);
 
         return $this->respond([
-            'message' => 'login successful',
-            'user' => $user,
-            'token' => $token
+            'status'    => 201,
+            'message'   => 'login successful',
+            'token'     => $token,
+            'user'      => [
+                'id'    => $user['id'],
+                'name'  => $user['name'],
+                'role'  => $user['role']
+            ]
+            
         ]);
     }
 
@@ -58,8 +64,9 @@ class AuthController extends ResourceController
         unset($user['password']);
 
         return $this->respondCreated([
-            'message' => 'User created successfully',
-            'save_user' => $user
+            'status'    => 201,
+            'message'   => 'User registered successfully',
+            'user' => $user
         ]);
     // $userId = $userModel->getInsertID();
         // $user = $userModel->find($userId);

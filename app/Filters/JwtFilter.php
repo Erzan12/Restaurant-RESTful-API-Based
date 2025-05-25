@@ -50,7 +50,9 @@ class JwtFilter implements FilterInterface
             $request->user = $decoded; //optional: attach user to request
         } catch (Exception $e) {
             return Services::response()
-                ->setJSON(['message' => 'Invalid or expired token'])
+                ->setJSON([
+                    'status' => 401,
+                    'message' => 'Unauthorized - Invalid token'])
                 ->setStatusCode(401);
         }
     }
