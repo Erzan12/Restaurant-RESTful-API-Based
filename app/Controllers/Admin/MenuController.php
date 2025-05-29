@@ -56,7 +56,7 @@ class MenuController extends ResourceController
                 'updated_menu'  => [
                     'name'          => $updatedMenu['name'],
                     'description'   => $updatedMenu['description'],
-                    'status'        => $updatedMenu['status'],
+                    'category_id'   => $updatedMenu['category_id'],
                     'updated_at'    => $updatedMenu['updated_at'],
                 ]
                 ]);
