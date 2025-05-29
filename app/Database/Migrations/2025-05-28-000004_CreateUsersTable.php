@@ -30,4 +30,6 @@ class CreateUsersTable extends Migration
     {
         $this->forge->dropTable('users');
     }
+    
 }
+

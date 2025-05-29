@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class MenuModel extends Model
 {
     protected $table = 'menu_items';
-    protected $allowedFields = ['name', 'description', 'price', 'category', 'status'];
+    protected $allowedFields = ['name', 'description', 'price', 'category_id'];
     protected $useSoftDeletes = true;
 
     // Dates
